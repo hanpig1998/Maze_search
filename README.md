@@ -1,4 +1,4 @@
-# introduction to AI
+# Introduction to AI
 
 Project 1 : Maze
 ### environment required
