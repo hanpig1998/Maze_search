@@ -17,3 +17,11 @@ width="700">
 width="700">
 </p>
 
+### How to play
+to play this maze game:
+
+    python main.py
+
+to test the efficiency of this algorithm 
+    
+    python test.py --maze_size maze_size(default = 10)
