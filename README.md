@@ -22,6 +22,6 @@ to play this maze game:
 
     python main.py
 
-to test the efficiency of this algorithm 
+to test the efficiency of different algorithms 
     
     python test.py --maze_size maze_size(default = 10)
