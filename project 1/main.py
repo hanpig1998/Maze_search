@@ -32,19 +32,31 @@ def main():
     text_startmenu_rect = text_startmenu.get_rect()
     text_startmenu_rect.center = (width/2,height/2) 
     text_nextlevel = text_font.render(u'Next level', True, (255,255,255),(0,0,0))
-    text_nextlevel_rect = text_startmenu.get_rect()
-    text_nextlevel_rect.center = (width/2+150,height/2+200)
+    text_nextlevel_rect = text_nextlevel.get_rect()
+    text_nextlevel_rect.center = (width/2,height/2+200)
+    text_congratulation = text_font.render(u'Congratulation!', True, (255,255,255),(0,0,0))
+    text_congratulation_rect = text_congratulation.get_rect()
+    text_congratulation_rect.center = (width/2,height/2-200)
 
     text_font1 = pygame.font.SysFont("times new roman", 20)
-    text_dfs = text_font1.render(u'View DFS searching', True, (0,0,0),(255,255,255))
+    text_dfs = text_font1.render(u'View DFS searching', True, (255,255,255))
     text_dfs_rect = text_dfs.get_rect()
     text_dfs_rect.center = (width-130,100)
-    text_bfs = text_font1.render(u'View BFS searching', True, (0,0,0),(255,255,255))
+    text_bfs = text_font1.render(u'View BFS searching', True, (255,255,255))
     text_bfs_rect = text_bfs.get_rect()
     text_bfs_rect.center = (width-130,140)
-    text_As = text_font1.render(u'View A* searching   ', True, (0,0,0),(255,255,255))
+    text_ucs = text_font1.render(u'View uniform cost searching', True, (255,255,255))
+    text_ucs_rect = text_ucs.get_rect()
+    text_ucs_rect.center = (width-130,180)
+    text_As = text_font1.render(u'View Astar searching   ', True, (255,255,255))
     text_As_rect = text_As.get_rect()
-    text_As_rect.center = (width-130,180)
+    text_As_rect.center = (width-130,220)
+    text_path = text_font1.render(u'View path   ', True, (255,255,255))
+    text_path_rect = text_path.get_rect()
+    text_path_rect.center = (width-130,260)
+    text_skip = text_font1.render(u'Skip to Next Level', True, (255,255,255))
+    text_skip_rect = text_skip.get_rect()
+    text_skip_rect.center = (width-130,600)
 
 
     image_startmenu = pygame.image.load('images/background/startmenu.png')
@@ -109,6 +121,13 @@ def main():
                     Gamestate = 13
                 if event.button == 1 and text_As_rect.collidepoint(event.pos):
                     Gamestate = 14
+                if event.button == 1 and text_ucs_rect.collidepoint(event.pos):
+                    Gamestate = 15
+                if event.button == 1 and text_path_rect.collidepoint(event.pos):
+                    Gamestate = 16
+                if event.button == 1 and text_skip_rect.collidepoint(event.pos):
+                    Gamestate = 100
+
 
             
             key_pressed = pygame.key.get_pressed()
@@ -151,8 +170,11 @@ def main():
             screen.blit(text_dfs,text_dfs_rect)
             screen.blit(text_bfs,text_bfs_rect)
             screen.blit(text_As,text_As_rect)
-            screen.blit(image_w,(width-167, height - 450))
-            screen.blit(image_asd,(width-230, height - 380))
+            screen.blit(text_path,text_path_rect)
+            screen.blit(text_ucs,text_ucs_rect)
+            screen.blit(image_w,(width-167, height - 300))
+            screen.blit(image_asd,(width-230, height - 230))
+            screen.blit(text_skip,text_skip_rect)
 
 
 
@@ -223,11 +245,51 @@ def main():
             me.rect.top = 32 * searching_process[0][1]
             Gamestate = 11
 
+        if Gamestate == 15:
+            searching_process = solution.solution_maze(Maze,'uniform')
+            visited = []
+            for point in searching_process:
+                visited.append([point[0],point[1]])
+                screen.fill(bg)
+                screen.blit(image_background,(0,0))
+                screen.blit(treasure,treasure_rect)
+                for each in walls:
+                    screen.blit(each.image1,each.rect)
+                for path in visited:
+                    screen.blit(image_path,(path[0]*32,path[1]*32))
+                me.rect.left = 32 * point[0]
+                me.rect.top = 32 * point[1]
+                screen.blit(me.people,me.rect)
+                pygame.display.flip()
+                pygame.time.wait(200)
+
+            me.rect.left = 32 * searching_process[0][0]
+            me.rect.top = 32 * searching_process[0][1]
+            Gamestate = 11
+
+
+        if Gamestate == 16:
+            searching_process = solution.solution_maze(Maze,'DFS')
+            path = solution.solution_to_path(searching_process)
+            screen.blit(image_background,(0,0))
+            for points in path:
+                screen.blit(image_path,(points[0]*32,points[1]*32))
+            for each in walls:
+                    screen.blit(each.image1,each.rect)
+            pygame.display.flip()
+            pygame.time.wait(1000)
+
+
+            Gamestate = 11
+
+
+
            
 
         if Gamestate == 100:
             screen.blit(image_victory,(0,0))
             screen.blit(text_nextlevel,text_nextlevel_rect)
+            screen.blit(text_congratulation,text_congratulation_rect)
             pygame.display.flip()
 
             if event.type == MOUSEBUTTONDOWN:

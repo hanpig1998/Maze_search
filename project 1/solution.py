@@ -62,6 +62,34 @@ def solution_maze(maze,method):
 
         return False
 
+    elif method == 'uniform':
+        q = queue.PriorityQueue()
+        temp = Maze_unit(start[0], start[1] ,0, 0)
+        q.put(temp)
+        while q:
+            temp = q.get()
+            solution.append([temp.x,temp.y])
+            visited[temp.x,temp.y] = 1
+            if temp.x == treasure[0] and temp.y == treasure[1]:
+                return solution
+            if visited[temp.x-1,temp.y] == 0 and maze[temp.x-1,temp.y] != 1:
+                temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+1, 0)
+                q.put(temp_lx)
+
+            if visited[temp.x+1,temp.y] == 0 and maze[temp.x+1,temp.y] != 1:
+                temp_rx = Maze_unit(temp.x+1, temp.y, temp.h_n+1, 0)
+                q.put(temp_rx)
+
+            if visited[temp.x,temp.y-1] == 0 and maze[temp.x,temp.y-1] != 1:
+                temp_uy = Maze_unit(temp.x, temp.y-1, temp.h_n+1, 0)
+                q.put(temp_uy)
+
+            if visited[temp.x,temp.y+1] == 0 and maze[temp.x,temp.y+1] != 1:
+                temp_dy = Maze_unit(temp.x, temp.y+1, temp.h_n+1, 0)
+                q.put(temp_dy)
+
+        return False
+
     elif method == 'A*':
         q = queue.PriorityQueue()
         temp = Maze_unit(start[0], start[1] ,0, distance[start[0],start[1]])
@@ -89,6 +117,23 @@ def solution_maze(maze,method):
                 q.put(temp_dy)
 
         return False
+
+def solution_to_path(solution):
+    length = len(solution)
+    path = []
+    path.append([solution[length-1][0],solution[length-1][1]])
+    temp = solution[length-1]
+    for j in range(length-1):
+        d1 = abs(solution[length-2-j][0]-temp[0])
+        d2 = abs(solution[length-2-j][1]-temp[1])
+        if max(d1,d2) == 1 and min(d1,d2) == 0:
+            temp = solution[length-2-j]
+            path.append([temp[0],temp[1]])
+
+    return path
+
+
+
 
 
 
