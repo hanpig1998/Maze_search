@@ -9,7 +9,9 @@ parser.add_argument('--maze_size', type=int, default=10)
 if __name__ == '__main__':
     args = parser.parse_args()
     time_cost = [0,0,0,0]
-    node_num = [0,0,0,0]
+    opennum = [0,0,0,0]
+    closenum = [0,0,0,0]
+    pathcost = [0,0,0,0]
 
     for i in range(1000):
         Maze = maze.createmaze(args.maze_size)
@@ -17,33 +19,51 @@ if __name__ == '__main__':
             Maze = maze.createmaze(args.maze_size)
         print('testing Maze  ' + str(i+1))
         time_start = time.time()
-        Answer = solution.solution_maze(Maze,'DFS')
+        a,open1,close1,pathcost1 = solution.solution_maze(Maze,'DFS')
         time_end = time.time()
         time_cost[0] += time_end - time_start
-        node_num[0] += len(Answer)
+        opennum[0] += open1
+        closenum[0] += close1
+        pathcost[0] += pathcost1
+
         time_start = time.time()
-        Answer = solution.solution_maze(Maze,'BFS')
+        a,open1,close1,pathcost1 = solution.solution_maze(Maze,'BFS')
         time_end = time.time()
         time_cost[1] += time_end - time_start
-        node_num[1] += len(Answer)
+        opennum[1] += open1
+        closenum[1] += close1
+        pathcost[1] += pathcost1
+
         time_start = time.time()
-        Answer = solution.solution_maze(Maze,'uniform')
+        a,open1,close1,pathcost1 = solution.solution_maze(Maze,'uniform')
         time_end = time.time()
         time_cost[2] += time_end - time_start
-        node_num[2] += len(Answer)
+        opennum[2] += open1
+        closenum[2] += close1
+        pathcost[2] += pathcost1
+
         time_start = time.time()
-        Answer = solution.solution_maze(Maze,'A*')
+        a,open1,close1,pathcost1 = solution.solution_maze(Maze,'A*')
         time_end = time.time()
         time_cost[3] += time_end - time_start
-        node_num[3] += len(Answer)
+        opennum[3] += open1
+        closenum[3] += close1
+        pathcost[3] += pathcost1
 
+
+
+        
     print('')
     print('Test Result')
     print('Maze_size = '+str(2*args.maze_size + 1))
-    print('method:DFS   time_cost:' + str(time_cost[0]).zfill(5) + '  Average node: ' + str(node_num[0]/1000).zfill(7))
-    print('method:BFS   time_cost:' + str(time_cost[1]).zfill(5) + '  Average node: ' + str(node_num[1]/1000).zfill(7))
-    print('method:UCS   time_cost:' + str(time_cost[2]).zfill(5) + '  Average node: ' + str(node_num[2]/1000).zfill(7))
-    print('method:A*S   time_cost:' + str(time_cost[3]).zfill(5) + '  Average node: ' + str(node_num[3]/1000).zfill(7))
+    print('method:DFS   time_cost:' + str(round(time_cost[0], 2)) + '  Average openlist: '
+     + str(opennum[0]/1000) + '  Average closelist: ' + str(closenum[0]/1000) + '  Average pathcost: ' + str(pathcost[0]/1000))
+    print('method:BFS   time_cost:' + str(round(time_cost[1], 2)) + '  Average openlist: '
+     + str(opennum[1]/1000) + '  Average closelist: ' + str(closenum[1]/1000) + '  Average pathcost: ' + str(pathcost[1]/1000))
+    print('method:UCS   time_cost:' + str(round(time_cost[2], 2)) + '  Average openlist: '
+     + str(opennum[2]/1000) + '  Average closelist: ' + str(closenum[3]/1000) + '  Average pathcost: ' + str(pathcost[2]/1000))
+    print('method:Astar time_cost:' + str(round(time_cost[3], 2)) + '  Average openlist: '
+     + str(opennum[3]/1000) + '  Average closelist: ' + str(closenum[3]/1000) + '  Average pathcost: ' + str(pathcost[3]/1000))
 
 
 

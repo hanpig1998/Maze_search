@@ -25,49 +25,65 @@ def solution_maze(maze,method):
 
     if method == 'DFS':
         stack = []
-        stack.append([start[0],start[1]])
+        temp = Maze_unit(start[0], start[1] ,0, 0)
+        stack.append(temp)
         while stack:
             temp = stack.pop()
-            solution.append([temp[0],temp[1]])
-            visited[temp[0],temp[1]] = 1
-            if temp[0] == treasure[0] and temp[1] == treasure[1]:
+            solution.append([temp.x,temp.y])
+            visited[temp.x,temp.y] = 1
+            if temp.x == treasure[0] and temp.y == treasure[1]:
                 solution_real = []
                 for li in solution:
                     if li not in solution_real:
                         solution_real.append(li)
-                return solution_real
-            if visited[temp[0]-1,temp[1]] == 0 and maze[temp[0]-1,temp[1]] != 0:
-                stack.append([temp[0]-1,temp[1]])
-            if visited[temp[0]+1,temp[1]] == 0 and maze[temp[0]+1,temp[1]] != 0:
-                stack.append([temp[0]+1,temp[1]])
-            if visited[temp[0],temp[1]-1] == 0 and maze[temp[0],temp[1]-1] != 0:
-                stack.append([temp[0],temp[1]-1])
-            if visited[temp[0],temp[1]+1] == 0 and maze[temp[0],temp[1]+1] != 0:
-                stack.append([temp[0],temp[1]+1])
+                return solution_real,len(stack),len(solution_real),temp.h_n
+            if visited[temp.x-1,temp.y] == 0 and maze[temp.x-1,temp.y] != 0:
+                temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+maze[temp.x-1,temp.y], 0)
+                stack.append(temp_lx)
+
+            if visited[temp.x+1,temp.y] == 0 and maze[temp.x+1,temp.y] != 0:
+                temp_rx = Maze_unit(temp.x+1, temp.y, temp.h_n+maze[temp.x+1,temp.y], 0)
+                stack.append(temp_rx)
+
+            if visited[temp.x,temp.y-1] == 0 and maze[temp.x,temp.y-1] != 0:
+                temp_uy = Maze_unit(temp.x, temp.y-1, temp.h_n+maze[temp.x,temp.y-1], 0)
+                stack.append(temp_uy)
+
+            if visited[temp.x,temp.y+1] == 0 and maze[temp.x,temp.y+1] != 0:
+                temp_dy = Maze_unit(temp.x, temp.y+1, temp.h_n+maze[temp.x,temp.y+1], 0)
+                stack.append(temp_dy)
 
         return False
         
     elif method == 'BFS':
         q = queue.Queue()
-        q.put([start[0],start[1]])
+        temp = Maze_unit(start[0], start[1] ,0, 0)
+        q.put(temp)
         while q:
             temp = q.get()
-            solution.append([temp[0],temp[1]])
-            visited[temp[0],temp[1]] = 1
-            if temp[0] == treasure[0] and temp[1] == treasure[1]:
+            solution.append([temp.x,temp.y])
+            visited[temp.x,temp.y] = 1
+            if temp.x == treasure[0] and temp.y == treasure[1]:
                 solution_real = []
                 for li in solution:
                     if li not in solution_real:
                         solution_real.append(li)
-                return solution_real
-            if visited[temp[0]-1,temp[1]] == 0 and maze[temp[0]-1,temp[1]] != 0:
-                q.put([temp[0]-1,temp[1]])
-            if visited[temp[0]+1,temp[1]] == 0 and maze[temp[0]+1,temp[1]] != 0:
-                q.put([temp[0]+1,temp[1]])
-            if visited[temp[0],temp[1]-1] == 0 and maze[temp[0],temp[1]-1] != 0:
-                q.put([temp[0],temp[1]-1])
-            if visited[temp[0],temp[1]+1] == 0 and maze[temp[0],temp[1]+1] != 0:
-                q.put([temp[0],temp[1]+1])
+                return solution_real,q.qsize(),len(solution_real),temp.h_n
+            if visited[temp.x-1,temp.y] == 0 and maze[temp.x-1,temp.y] != 0:
+                temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+maze[temp.x-1,temp.y], 0)
+                q.put(temp_lx)
+
+            if visited[temp.x+1,temp.y] == 0 and maze[temp.x+1,temp.y] != 0:
+                temp_rx = Maze_unit(temp.x+1, temp.y, temp.h_n+maze[temp.x+1,temp.y], 0)
+                q.put(temp_rx)
+
+            if visited[temp.x,temp.y-1] == 0 and maze[temp.x,temp.y-1] != 0:
+                temp_uy = Maze_unit(temp.x, temp.y-1, temp.h_n+maze[temp.x,temp.y-1], 0)
+                q.put(temp_uy)
+
+            if visited[temp.x,temp.y+1] == 0 and maze[temp.x,temp.y+1] != 0:
+                temp_dy = Maze_unit(temp.x, temp.y+1, temp.h_n+maze[temp.x,temp.y+1], 0)
+                q.put(temp_dy)
 
         return False
 
@@ -84,7 +100,7 @@ def solution_maze(maze,method):
                 for li in solution:
                     if li not in solution_real:
                         solution_real.append(li)
-                return solution_real
+                return solution_real,q.qsize(),len(solution_real),temp.h_n
             if visited[temp.x-1,temp.y] == 0 and maze[temp.x-1,temp.y] != 0:
                 temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+maze[temp.x-1,temp.y], 0)
                 q.put(temp_lx)
@@ -116,21 +132,21 @@ def solution_maze(maze,method):
                 for li in solution:
                     if li not in solution_real:
                         solution_real.append(li)
-                return solution_real
+                return solution_real,q.qsize(),len(solution_real),temp.h_n
             if visited[temp.x-1,temp.y] == 0 and maze[temp.x-1,temp.y] != 0:
-                temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+maze[temp.x-1,temp.y], 2*distance[temp.x-1,temp.y])
+                temp_lx = Maze_unit(temp.x-1, temp.y, temp.h_n+maze[temp.x-1,temp.y], distance[temp.x-1,temp.y])
                 q.put(temp_lx)
 
             if visited[temp.x+1,temp.y] == 0 and maze[temp.x+1,temp.y] != 0:
-                temp_rx = Maze_unit(temp.x+1, temp.y, temp.h_n+maze[temp.x+1,temp.y], 2*distance[temp.x+1,temp.y])
+                temp_rx = Maze_unit(temp.x+1, temp.y, temp.h_n+maze[temp.x+1,temp.y], distance[temp.x+1,temp.y])
                 q.put(temp_rx)
 
             if visited[temp.x,temp.y-1] == 0 and maze[temp.x,temp.y-1] != 0:
-                temp_uy = Maze_unit(temp.x, temp.y-1, temp.h_n+maze[temp.x,temp.y-1], 2*distance[temp.x,temp.y-1])
+                temp_uy = Maze_unit(temp.x, temp.y-1, temp.h_n+maze[temp.x,temp.y-1], distance[temp.x,temp.y-1])
                 q.put(temp_uy)
 
             if visited[temp.x,temp.y+1] == 0 and maze[temp.x,temp.y+1] != 0:
-                temp_dy = Maze_unit(temp.x, temp.y+1, temp.h_n+maze[temp.x,temp.y+1], 2*distance[temp.x,temp.y+1])
+                temp_dy = Maze_unit(temp.x, temp.y+1, temp.h_n+maze[temp.x,temp.y+1], distance[temp.x,temp.y+1])
                 q.put(temp_dy)
 
         return False

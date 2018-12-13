@@ -62,8 +62,6 @@ def main():
     image_startmenu = pygame.image.load('images/background/startmenu.png')
     image_background = pygame.image.load('images/background/background.png')
     image_path = pygame.image.load("images/wall/path.png").convert_alpha()
-    image_w = pygame.image.load("images/background/w.png").convert_alpha()
-    image_asd = pygame.image.load("images/background/asd.png").convert_alpha()
     image_victory = pygame.image.load("images/background/victory.png").convert_alpha()
 
 
@@ -176,6 +174,26 @@ def main():
             for each in ices:
                 screen.blit(each.image1,each.rect)
 
+            solution1,open1,close1,path_cost1 = solution.solution_maze(Maze,'DFS')
+            solution2,open2,close2,path_cost2 = solution.solution_maze(Maze,'BFS')
+            solution3,open3,close3,path_cost3 = solution.solution_maze(Maze,'uniform')
+            solution4,open4,close4,path_cost4 = solution.solution_maze(Maze,'A*')
+            text_type = text_font1.render('openlist  closelist  pathcost', True, (255,255,255))
+            text_result1 = text_font1.render('DFS         ' + str(open1).zfill(3) + '        ' + str(close1).zfill(3) + '         ' + str(path_cost1).zfill(3), True, (255,255,255))
+            text_result2 = text_font1.render('BFS         ' + str(open2).zfill(3) + '        ' + str(close2).zfill(3) + '         ' + str(path_cost2).zfill(3), True, (255,255,255))
+            text_result3 = text_font1.render('UCS         ' + str(open3).zfill(3) + '        ' + str(close3).zfill(3) + '         ' + str(path_cost3).zfill(3), True, (255,255,255))
+            text_result4 = text_font1.render('A*S         ' + str(open4).zfill(3) + '        ' + str(close4).zfill(3) + '         ' + str(path_cost4).zfill(3), True, (255,255,255))
+
+            screen.blit(text_type,(740,340))
+            screen.blit(text_result1,(680,380))
+            screen.blit(text_result2,(680,420))
+            screen.blit(text_result3,(680,460))
+            screen.blit(text_result4,(680,500))
+
+
+
+
+
 
             screen.blit(me.people,me.rect)
             screen.blit(text_dfs,text_dfs_rect)
@@ -183,14 +201,12 @@ def main():
             screen.blit(text_As,text_As_rect)
             screen.blit(text_path,text_path_rect)
             screen.blit(text_ucs,text_ucs_rect)
-            screen.blit(image_w,(width-167, height - 300))
-            screen.blit(image_asd,(width-230, height - 230))
             screen.blit(text_skip,text_skip_rect)
 
 
 
         if Gamestate == 12:
-            searching_process = solution.solution_maze(Maze,'DFS')
+            searching_process,a,b,c = solution.solution_maze(Maze,'DFS')
             visited = []
             for point in searching_process:
                 visited.append([point[0],point[1]])
@@ -215,7 +231,7 @@ def main():
             Gamestate = 11
 
         if Gamestate == 13:
-            searching_process = solution.solution_maze(Maze,'BFS')
+            searching_process,a,b,c = solution.solution_maze(Maze,'BFS')
             visited = []
             for point in searching_process:
                 visited.append([point[0],point[1]])
@@ -239,7 +255,7 @@ def main():
             Gamestate = 11
 
         if Gamestate == 14:
-            searching_process = solution.solution_maze(Maze,'A*')
+            searching_process,a,b,c = solution.solution_maze(Maze,'A*')
             visited = []
             for point in searching_process:
                 visited.append([point[0],point[1]])
@@ -263,7 +279,7 @@ def main():
             Gamestate = 11
 
         if Gamestate == 15:
-            searching_process = solution.solution_maze(Maze,'uniform')
+            searching_process,a,b,c = solution.solution_maze(Maze,'uniform')
             visited = []
             for point in searching_process:
                 visited.append([point[0],point[1]])
@@ -288,7 +304,7 @@ def main():
 
 
         if Gamestate == 16:
-            searching_process = solution.solution_maze(Maze,'A*')
+            searching_process,a,b,c = solution.solution_maze(Maze,'A*')
             path = solution.solution_to_path(searching_process)
             screen.blit(image_background,(0,0))
             for each in ices:
