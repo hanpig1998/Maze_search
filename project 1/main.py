@@ -78,22 +78,31 @@ def main():
 
 
     wall_location = []
+    ice_location = []
     for i in range(2*maze_size+1):
         for j in range(2*maze_size+1):
-            if Maze[i][j] == 1:
+            if Maze[i][j] == 0:
                 wall_location.append((i,j))
             elif Maze[i][j] == 10:
                 position_people = i*32,j*32
-            elif Maze[i][j] == 100:
+            elif Maze[i][j] == 1:
                 position_treasure = i*32,j*32
+            elif Maze[i][j] == 4:
+                ice_location.append((i,j))
 
     me = people.People(position_people)
 
     walls = []
+    ices = []
     for each in wall_location:
         position = each[0]*32,each[1]*32
-        wa = wall.Wall(position)
+        wa = wall.Wall(position, 0)
         walls.append(wa)
+
+    for each in ice_location:
+        position = each[0]*32,each[1]*32
+        wa = wall.Wall(position, 1)
+        ices.append(wa)
     
     treasure = pygame.image.load('images/wall/treasure.png')
     treasure_rect = treasure.get_rect()
@@ -147,7 +156,7 @@ def main():
                 key_state = 0;
 
             location_temp = (int(me.rect.left/32),int(me.rect.top/32));
-            if  Maze[location_temp[0]][location_temp[1]] == 1:
+            if  Maze[location_temp[0]][location_temp[1]] == 0:
                 if key_pressed[K_w]:
                     me.rect.top += me.speed
                 if key_pressed[K_s]:
@@ -156,13 +165,15 @@ def main():
                     me.rect.left += me.speed
                 if key_pressed[K_d]:
                     me.rect.left -= me.speed
-            elif Maze[location_temp[0]][location_temp[1]] == 100:
+            elif Maze[location_temp[0]][location_temp[1]] == 1:
                 Gamestate = 100
 
             screen.fill(bg)
             screen.blit(image_background,(0,0))
             screen.blit(treasure,treasure_rect)
             for each in walls:
+                screen.blit(each.image1,each.rect)
+            for each in ices:
                 screen.blit(each.image1,each.rect)
 
 
@@ -188,6 +199,8 @@ def main():
                 screen.blit(treasure,treasure_rect)
                 for each in walls:
                     screen.blit(each.image1,each.rect)
+                for each in ices:
+                    screen.blit(each.image1,each.rect)
                 for path in visited:
                     screen.blit(image_path,(path[0]*32,path[1]*32))
 
@@ -211,6 +224,8 @@ def main():
                 screen.blit(treasure,treasure_rect)
                 for each in walls:
                     screen.blit(each.image1,each.rect)
+                for each in ices:
+                    screen.blit(each.image1,each.rect)
                 for path in visited:
                     screen.blit(image_path,(path[0]*32,path[1]*32))
                 me.rect.left = 32 * point[0]
@@ -232,6 +247,8 @@ def main():
                 screen.blit(image_background,(0,0))
                 screen.blit(treasure,treasure_rect)
                 for each in walls:
+                    screen.blit(each.image1,each.rect)
+                for each in ices:
                     screen.blit(each.image1,each.rect)
                 for path in visited:
                     screen.blit(image_path,(path[0]*32,path[1]*32))
@@ -255,6 +272,8 @@ def main():
                 screen.blit(treasure,treasure_rect)
                 for each in walls:
                     screen.blit(each.image1,each.rect)
+                for each in ices:
+                    screen.blit(each.image1,each.rect)
                 for path in visited:
                     screen.blit(image_path,(path[0]*32,path[1]*32))
                 me.rect.left = 32 * point[0]
@@ -269,13 +288,15 @@ def main():
 
 
         if Gamestate == 16:
-            searching_process = solution.solution_maze(Maze,'DFS')
+            searching_process = solution.solution_maze(Maze,'A*')
             path = solution.solution_to_path(searching_process)
             screen.blit(image_background,(0,0))
+            for each in ices:
+                screen.blit(each.image1,each.rect)
             for points in path:
-                screen.blit(image_path,(points[0]*32,points[1]*32))
+                screen.blit(image_path,(points[0]*32,points[1]*32))           
             for each in walls:
-                    screen.blit(each.image1,each.rect)
+                screen.blit(each.image1,each.rect)
             pygame.display.flip()
             pygame.time.wait(1000)
 
@@ -302,22 +323,31 @@ def main():
                         Maze = maze.createmaze(maze_size)
 
                     wall_location = []
+                    ice_location = []
                     for i in range(2*maze_size+1):
                         for j in range(2*maze_size+1):
-                            if Maze[i][j] == 1:
+                            if Maze[i][j] == 0:
                                 wall_location.append((i,j))
                             elif Maze[i][j] == 10:
                                 position_people = i*32,j*32
-                            elif Maze[i][j] == 100:
+                            elif Maze[i][j] == 1:
                                 position_treasure = i*32,j*32
+                            elif Maze[i][j] == 4:
+                                ice_location.append((i,j))
 
                     me = people.People(position_people)
 
                     walls = []
+                    ices = []
                     for each in wall_location:
                         position = each[0]*32,each[1]*32
-                        wa = wall.Wall(position)
+                        wa = wall.Wall(position,0)
                         walls.append(wa)
+
+                    for each in ice_location:
+                        position = each[0]*32,each[1]*32
+                        wa = wall.Wall(position,1)
+                        ices.append(wa)
                     
                     treasure = pygame.image.load('images/wall/treasure.png')
                     treasure_rect = treasure.get_rect()

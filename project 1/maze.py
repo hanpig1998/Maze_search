@@ -5,7 +5,7 @@ def createmaze(size_maze):
     sx = size_maze
     sy = size_maze
     dfs = [[0 for col in range(sx)] for row in range(sy)]
-    maze = [[0 for col in range(2*sx+1)] for row in range(2*sy+1)]
+    maze = [[2 for col in range(2*sx+1)] for row in range(2*sy+1)]
     #1:up 2:down 3:left 4:right
     operation = {1:(0,-1),2:(0,1),3:(-1,0),4:(1,0)}
     direction = [1, 2, 3, 4]
@@ -14,11 +14,11 @@ def createmaze(size_maze):
     for i in range(2*sx+1):
         if i%2 == 0:
             for j in range(2*sx+1):
-                maze[i][j] = 1
+                maze[i][j] = 0
     for i in range(2*sy+1):
         if i%2 == 0:
             for j in range(2*sy+1):
-                maze[j][i] = 1
+                maze[j][i] = 0
      
     def generateMaze(start):
         x, y = start
@@ -33,19 +33,19 @@ def createmaze(size_maze):
                     mx = 2*x + 1
                     my = 2*y + 1
                     if d == 1:
-                        maze[my-1][mx] = 0
+                        maze[my-1][mx] = 2
                     elif d == 2:
-                        maze[my+1][mx] = 0
+                        maze[my+1][mx] = 2
                     elif d == 3:
-                        maze[my][mx-1] = 0
+                        maze[my][mx-1] = 2
                     elif d == 4:
-                        maze[my][mx+1] = 0
+                        maze[my][mx+1] = 2
                     generateMaze((px,py))        
      
     generateMaze((0,0))
 
     maze = np.array(maze)
-    location = np.where(maze < 1)
+    location = np.where(maze > 0)
     num = location[0].size
     point1 = np.random.randint(1,num)
     point2 = np.random.randint(1,num)
@@ -54,8 +54,18 @@ def createmaze(size_maze):
     start = [location[0][point1],location[1][point1]]
     treasure = [location[0][point2],location[1][point2]]
 
-    maze[treasure[0],treasure[1]] = 100
+    maze[treasure[0],treasure[1]] = 1
     maze[start[0],start[1]] = 10
+
+    for i in range(1,2*size_maze):
+        for j in range(1,2*size_maze):
+            if maze[i,j] == 0 and np.random.randint(1,10) > 7:
+                maze[i,j] = 2
+
+    for i in range(1,2*size_maze):
+        for j in range(1,2*size_maze):
+            if maze[i,j] == 2 and np.random.randint(1,10) > 7:
+                maze[i,j] = 4
 
 
     return maze

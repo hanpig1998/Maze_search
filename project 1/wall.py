@@ -1,9 +1,12 @@
 import pygame
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self,position):
+    def __init__(self,position,isice):
         pygame.sprite.Sprite.__init__(self)
-        self.image1 = pygame.image.load("images/wall/2.png").convert_alpha()
+        if isice == 0:
+            self.image1 = pygame.image.load("images/wall/2.png").convert_alpha()
+        else:
+            self.image1 = pygame.image.load("images/wall/ice.png").convert_alpha()
 
         self.rect = self.image1.get_rect()
 
