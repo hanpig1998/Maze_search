@@ -1,6 +1,7 @@
 # Introduction to AI
 
-Project 1 : Maze: different searching algorithms
+Project 1 : Maze: different searching algorithms  
+Never use pygame to produce GUI again!!!!!
 ### environment required
 
     pygame 1.9.4
