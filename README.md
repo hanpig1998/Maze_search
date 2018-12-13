@@ -27,7 +27,7 @@ width="700">
 </p>
 
 <p align="center">
-    <img src="project 1/images/screenshot/Maze.png"
+    <img src="Maze.png"
 width="700">
 </p>
 
